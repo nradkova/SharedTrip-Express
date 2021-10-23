@@ -1,8 +1,9 @@
 const router = require('express').Router();
+
+const formatErrorMsg = require('../util/formatErrorMsg');
+const { getUserTrips } = require('../services/userService');
 const { isGuest, isUser } = require('../middlewares/guard');
 const { userValidation } = require('../middlewares/validation');
-const { getUserByEmail, getUserTrips } = require('../services/userService');
-const formatErrorMsg = require('../util/formatErrorMsg')
 
 router.get('/login', isGuest(), (req, res) => {
     res.render('auth/login', { title: 'Login'})

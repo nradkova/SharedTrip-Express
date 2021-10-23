@@ -53,15 +53,23 @@ async function getAll() {
     return await Trip.find({}).lean();
 }
 
-// async function rentHousing(id, userId) {
-//     const current = await Housing.findById(id);
-//     if (!current) {
-//         throw new ReferenceError('No such data');
-//     }
-//     current.rented.push(userId);
-//     current.pieces-=1;
-//     return await current.save();
-// }
+async function reserveTrip(id, userId) {
+    const current = await Trip.findById(id);
+    if (!current) {
+        throw new ReferenceError('No such data');
+    }
+    current.buddies.push(userId);
+    current.seats-=1;
+    return await current.save();
+}
+
+async function getTripBuddies(id) {
+    const current = await Trip.findById(id).populate({ path: 'buddies', select: 'email' }).lean();
+    if (!current) {
+        throw new ReferenceError('No such data');
+    }
+    return current.buddies;
+}
 
 // async function getAllHousingsOfType(type) {
 //     return await Housing.find().where('type').equals(type).lean();
@@ -79,4 +87,7 @@ module.exports = {
     editOne,
     delOne,
     getAll,
+    reserveTrip,
+    getTripBuddies
+
 }
