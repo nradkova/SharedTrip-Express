@@ -3,7 +3,7 @@ const router = require('express').Router();
 router.get('/', async (req, res) => {
     try {
         const ctx = {
-            title: 'Real Estate Agency'
+            title: 'Shared Trip'
         }
         
         res.render('home/home', ctx)
