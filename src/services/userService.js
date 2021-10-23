@@ -19,9 +19,23 @@ async function getUserByEmail(email) {
     return user;
 }
 
+async function getUserTrips(id) {
+    const user = await User.findById(id).populate('trips').lean();
+    return user;
+}
+
+async function editUser(userId,tripId) {
+    const user = await User.findById(userId);
+    user.trips.push(tripId);
+    await user.save();
+    return user;
+}
+
 
 module.exports = {
     createUser,
     getUserByUsername,
-    getUserByEmail
+    getUserByEmail,
+    editUser,
+    getUserTrips
 }

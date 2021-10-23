@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { isGuest, isUser } = require('../middlewares/guard');
 const { userValidation } = require('../middlewares/validation');
+const { getUserByEmail, getUserTrips } = require('../services/userService');
 const formatErrorMsg = require('../util/formatErrorMsg')
 
 router.get('/login', isGuest(), (req, res) => {
@@ -43,6 +44,11 @@ router.post('/register', userValidation(), async (req, res) => {
 router.get('/logout',isUser(), (req, res) => {
     req.auth.logout();
     res.redirect('/');
+});
+
+router.get('/user',isUser(), async (req, res) => {
+    const user=await getUserTrips(req.user._id);
+    res.render('auth/profile', { title: 'Profile',user});
 });
 
 module.exports = router;

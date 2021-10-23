@@ -5,6 +5,7 @@ const formatErrorMsg = require('../util/formatErrorMsg');
 const { isUser, isOwner } = require('../middlewares/guard');
 const { tripValidation } = require('../middlewares/validation');
 const { createOne, delOne, editOne, getAll} = require('../services/tripService');
+const { editUser } = require('../services/userService');
 
 router.get('/', async(req, res) => {
     try {
@@ -42,7 +43,8 @@ router.post('/create', isUser(), tripValidation(), async (req, res) => {
             description,
             owner: req.user._id
         }
-        await createOne(trip);
+        const created=await createOne(trip);
+        await editUser(req.user._id,created._id);
         res.redirect('/');
     } catch (error) {
         if (error.name == 'inputError'||error.name == 'ValidationError') {
