@@ -4,12 +4,15 @@ function userValidation() {
     return async (req, res, next) => {
         await body('email').trim().isEmail().withMessage('Email is invalid!').toLowerCase().run(req);
         await body('password').trim().isLength({ min: 4 }).withMessage('Password should be at least 4 characters!').run(req);
-        await body('repass').trim().custom((value, { req }) => {
-            if (value !== req.body.password) {
-                return 'Passwords do not match!';
-            }
-            return true;
-        }).run(req);
+       
+       if(req.body.repass||req.body.repass==''){
+           await body('repass').trim().custom((value, { req }) => {
+               if (value !== req.body.password) {
+                   throw 'Passwords do not match!';
+               }
+               return true;
+           }).run(req);
+       }
 
         const errors = validationResult(req).errors;
         if (errors.length > 0) {
